@@ -18,7 +18,7 @@ class TestMyScript(unittest.TestCase):
 		self.assertEqual(cm.exception.code, 1)
 		output = captured_output.getvalue().strip()
 		self.assertIn("incorrect input", output)
-		self.assertIn("./spider [-rlp] [domain]", output)
+		self.assertIn("/spider [-rlp] URL", output)
 	
 	@patch('spider.sys.argv', ['./spider'])  # Simulate command-line input
 	def test_parse_spider_args_no_input(self):
@@ -29,7 +29,7 @@ class TestMyScript(unittest.TestCase):
 		self.assertEqual(cm.exception.code, 1)
 		output = captured_output.getvalue().strip()
 		self.assertIn("incorrect input", output)
-		self.assertIn("./spider [-rlp] [domain]", output)
+		self.assertIn("./spider [-rlp] URL", output)
 	
 	@patch('spider.sys.argv', ['not_spider', "www.example.com"])  # Simulate command-line input
 	def test_parse_spider_args_no_spider(self):
@@ -40,7 +40,7 @@ class TestMyScript(unittest.TestCase):
 		self.assertEqual(cm.exception.code, 1)
 		output = captured_output.getvalue().strip()
 		self.assertIn("incorrect input", output)
-		self.assertIn("./spider [-rlp] [domain]", output)
+		self.assertIn("./spider [-rlp] URL", output)
 	
 	def test_parse_spider_r(self):
 		args =  ['./spider', '-r',"www.example.com"]
@@ -123,6 +123,53 @@ class TestMyScript(unittest.TestCase):
 		self.assertEqual(spider.parse_spider_args(args)['url'], 'www.example.com')
 	
 
+	def test_parse_spider_pr(self):
+		args =  ['./spider', '-rp',"www.example.com"]
+		self.assertTrue(spider.has_worng_args_input(args))
+		args =  ['./spider', '-pr',"www.example.com"]
+		self.assertTrue(spider.has_worng_args_input(args))
+		args =  ['./spider', '-r', '-p',"www.example.com"]
+		self.assertTrue(spider.has_worng_args_input(args))
+		args =  ['./spider', '-p', '-r',"www.example.com"]
+		self.assertTrue(spider.has_worng_args_input(args))
+		args =  ['./spider', '-p', '-r' ,'/saveme' ,"www.example.com"]
+		self.assertTrue(spider.has_worng_args_input(args))
+		args =  ['./spider', '-p', '-l' ,"www.example.com"]
+		self.assertTrue(spider.has_worng_args_input(args))
+		args =  ['./spider', '-p', '/svame', '-l' ,"www.example.com"]
+		self.assertTrue(spider.has_worng_args_input(args))
+		args =  ['./spider', '-p', '-r' ,'-r' , "www.example.com"]
+		self.assertTrue(spider.has_worng_args_input(args))
+		args =  ['./spider', '-p', '-l' ,'-r' , "www.example.com"]
+		self.assertTrue(spider.has_worng_args_input(args))
+		args =  ['./spider', '-r', '/saveme' ,'-p' , "www.example.com"]
+		self.assertTrue(spider.has_worng_args_input(args))
+		args =  ['./spider', '-r', '-p', "www.example.com"]
+		self.assertTrue(spider.has_worng_args_input(args))
+		args =  ['./spider', '-p', '/saveme' ,'-r' , "www.example.com"]
+		self.assertFalse(spider.has_worng_args_input(args))
+		self.assertFalse(spider.has_worng_args_input(args))
+
+	def test_parse_spider_pr_param(self):
+		args =  ['./spider', '-p', '/saveme' ,'-r' , "www.example.com"]
+		self.assertEqual(spider.parse_spider_args(args)['p'], '/saveme')
+		self.assertEqual(spider.parse_spider_args(args)['l'], 0)
+		self.assertTrue(spider.parse_spider_args(args)['r'])
+		self.assertEqual(spider.parse_spider_args(args)['url'], 'www.example.com')
+		args =  ['./spider', '-r', '-p', '/saveme', "www.example.com"]
+		self.assertEqual(spider.parse_spider_args(args)['p'], '/saveme')
+		self.assertEqual(spider.parse_spider_args(args)['l'], 0)
+		self.assertTrue(spider.parse_spider_args(args)['r'])
+		self.assertEqual(spider.parse_spider_args(args)['url'], 'www.example.com')
 
 if __name__ == "__main__":
 	unittest.main()
+
+
+
+
+
+
+
+
+
