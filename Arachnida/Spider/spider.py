@@ -12,5 +12,6 @@ def main():
 		close_with_error_messege()
 	print(len(parse_spider_args(sys.argv)))
 
+
 if __name__ == "__main__":
 	main()
