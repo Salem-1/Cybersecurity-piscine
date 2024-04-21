@@ -21,6 +21,10 @@ def	is_Invalid_arg_input(args, len_args):
 		return True 
 	return False
 
+def has_no_options(args, len_args):
+	if len_args == 2 and args[1][0] != '-':
+		return True
+	return False 
 
 def	is_r_or_rl(args, len_args):
 	if len_args == 3 and (args[1] == "-r" or args[1] == "-rl" or args[1] == "-lr"):

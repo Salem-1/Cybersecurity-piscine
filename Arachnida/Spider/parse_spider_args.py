@@ -4,6 +4,8 @@ def has_worng_args_input(args):
 	len_args = len(args)
 	if is_Invalid_arg_input(args, len_args):
 		return True
+	if has_no_options(args, len_args):
+		return False
 	if is_valid_single_rlp_compinations(args, len_args) :
 		return False
 	if is_valid_douple_rlp_compinations(args, len_args):
@@ -16,6 +18,8 @@ def	fill_params(args):
 	len_args = len(args)
 	if is_r_or_rl(args, len_args):
 		return get_ready_params(r=True, l=5, url=args[2])
+	elif has_no_options(args, len_args):
+		return get_ready_params(p='./data', url=args[1])
 	elif is_p(args, len_args):
 		return get_ready_params(p=args[2], url=args[3])
 	elif is_rl_no_number(args, len_args):
@@ -77,7 +81,7 @@ def	fill_params(args):
 	elif is_l_p_r_with_number(args, len_args):
 		return get_ready_params(r=True, l=int(args[2]), p=args[4], url=args[6])
 	elif is_l_p_r_no_number(args, len_args):
-		return get_ready_params(r=True, l=5, p=args[3], url=args[5])
+		return get_ready_params(r=True, l=5, p=args[3], url=args[5	])
 	else:
 		close_with_error_messege()
 

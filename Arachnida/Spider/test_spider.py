@@ -5,7 +5,7 @@ from unittest.mock import patch
 from io import StringIO
 import sys
 import spider
-
+import collect_links
 
 #Try break the program then put all of it in trycatch
 class TestMyScript(unittest.TestCase):
