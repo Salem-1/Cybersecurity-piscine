@@ -16,7 +16,22 @@ Steps for images fetching:
 
 """
 def	request_page(url):
-	return requests.get(url)
+	return requests.get(url, timeout=10)
+
+
+def	get_links_in_page(url):
+	r = requests.get(url, timeout=10)
+	soup = BeautifulSoup(r.text, 'html.parser')
+	link_layer = []
+	for links in soup.find_all('a'):
+		single_link = links.get('href')
+		try:
+			if single_link[0] == '/':
+				single_link = url + single_link
+			link_layer.append(single_link)
+		except Exception as e:
+			print(e)
+	return link_layer
 
 
 # def	fetch_images(image_links, offset_name):
