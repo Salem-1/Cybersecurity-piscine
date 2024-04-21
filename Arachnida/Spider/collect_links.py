@@ -37,7 +37,7 @@ def	get_links_in_page(url):
 # def	fetch_images(image_links, offset_name):
 # 	x = 0
 # 	for image_url in image_links:
-# 		r = requests.get(image_url, timeout=2)
+# 		r = requests.get(image_url, timeout=5)
 # 		filename = "./data/" + offset_name +  "_"+ str(x) +".jpg"
 # 		with open(filename, 'wb') as fd:
 # 			for chunk in r.iter_content(chunk_size=128):
@@ -59,9 +59,13 @@ def	get_links_in_page(url):
 # 	return link_layer
 
 def extract_image_links(request_text, url):
-	soup = BeautifulSoup(request_text, 'html.parser')
-	images = soup.find_all('img')
 	image_links = []
+	try:
+		soup = BeautifulSoup(request_text, 'html.parser')
+		images = soup.find_all('img')
+	except Exception as e:
+		return image_links
+	
 	for image in images:
 		try:
 			image_link = image.get('src')
