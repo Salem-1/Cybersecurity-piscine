@@ -1,0 +1,54 @@
+#!/usr/bin/python3
+import sys
+from PIL import Image, ExifTags
+from PIL.ExifTags import TAGS
+
+
+def check_args(args):
+	if len(args) < 2:
+		print("wrong number of arguments")
+		exit(1)
+
+def print_image_meta_data(file):
+	image = Image.open(file)
+	exifdata = image.getexif()
+	for tagid in exifdata:
+		tagname = TAGS.get(tagid, tagid)
+		value = exifdata.get(tagid)
+		print(f"{tagname:20}: {value}")
+		
+
+def process_files(files):
+	for file in files:
+		if not_valid_file(file):
+			print (file)
+			print(file ," invalid file format")
+			continue
+		try:
+			print_image_meta_data(file)
+		except Exception as e:
+			print(file , " has no exif data")
+			pass
+
+
+def main():
+	check_args(sys.argv)
+	process_files(sys.argv[1:])
+	
+
+def   not_valid_file(filename):
+	if len(filename) < 4:
+		return True
+	allowed_mimes = [ 'jpg',
+				  'jpeg',
+                        'png',             
+                        'gif',             
+                        'bmp']
+	if filename[-4:] == "jpeg" or filename[-3:] in allowed_mimes:
+		return False
+	return True
+if __name__ == "__main__":
+	main()
+
+
+
