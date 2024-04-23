@@ -11,10 +11,83 @@ def check_args(args):
 
 def print_image_meta_data(file):
 	image = Image.open(file)
+	# extract other basic metadata
+	metadata_dic = {
+    "Filename": image.filename,
+    "Image Size": image.size,
+    "Image Height": image.height,
+    "Image Width": image.width,
+    "Image Format": image.format,
+    "Image Mode": image.mode,
+    "Image is Animated": getattr(image, "is_animated", False),
+    "Frames in Image": getattr(image, "n_frames", 1),
+    "Exif Data": image.getexif(),
+    "ICC Profile": image.info.get("icc_profile"),
+    "Info": image.info,
+    "Palette": image.palette,
+    "Quantization": image.quantization,
+    "Layers": image.layers,
+    "Compression": image.info.get("compression"),
+    "Transparency": image.info.get("transparency"),
+    "Background": image.info.get("background"),
+    "Resolution": image.info.get("resolution"),
+    "Offset": image.info.get("offset"),
+    "dpi": image.info.get("dpi"),
+    "Description": image.info.get("description"),
+    "Software": image.info.get("software"),
+    "Quality": image.info.get("quality"),
+    "Progressive": image.info.get("progressive"),
+    "Bits per Pixel": image.info.get("bits"),
+    "Multimedia": image.info.get("multimedia"),
+    "Color Space": image.info.get("color_space"),
+    "Color Palette": image.info.get("color_palette"),
+    "Camera Make": image.info.get("make"),
+    "Camera Model": image.info.get("model"),
+    "Camera Exposure Time": image.info.get("exposure_time"),
+    "Camera Aperture": image.info.get("aperture"),
+    "Camera Focal Length": image.info.get("focal_length"),
+    "Camera ISO": image.info.get("iso"),
+    "Camera Orientation": image.info.get("orientation"),
+    "Camera Flash": image.info.get("flash"),
+    "Camera White Balance": image.info.get("white_balance"),
+    "Camera Metering Mode": image.info.get("metering_mode"),
+    "Camera Exposure Program": image.info.get("exposure_program"),
+    "Camera Exposure Bias": image.info.get("exposure_bias"),
+    "Camera Max Aperture": image.info.get("max_aperture"),
+    "Camera Digital Zoom": image.info.get("digital_zoom"),
+    "Camera 35mm Focal Length": image.info.get("focal_length_in_35mm_film"),
+    "Camera Scene Capture Type": image.info.get("scene_capture_type"),
+    "Camera Subject Distance": image.info.get("subject_distance"),
+    "Camera Sensing Method": image.info.get("sensing_method"),
+    "Camera File Source": image.info.get("file_source"),
+    "Camera Scene Type": image.info.get("scene_type"),
+    "Camera Custom Rendered": image.info.get("custom_rendered"),
+    "Camera Exposure Mode": image.info.get("exposure_mode"),
+    "Camera White Balance Mode": image.info.get("white_balance_mode"),
+    "Camera Digital Zoom Ratio": image.info.get("digital_zoom_ratio"),
+    "Camera Scene Capture Mode": image.info.get("scene_capture_mode"),
+    "Camera Gain Control": image.info.get("gain_control"),
+    "Camera Contrast": image.info.get("contrast"),
+    "Camera Saturation": image.info.get("saturation"),
+    "Camera Sharpness": image.info.get("sharpness"),
+    "Camera Subject Distance Range": image.info.get("subject_distance_range"),
+    "Camera Image Unique ID": image.info.get("image_unique_id"),
+    "Camera Lens Make": image.info.get("lens_make"),
+    "Camera Lens Model": image.info.get("lens_model"),
+    "Camera Lens Serial Number": image.info.get("lens_serial_number"),
+    "Camera Lens Specification": image.info.get("lens_specification"),
+}
+	for key, val in metadata_dic.items():
+		if val is not None:
+			print(f"{key:25}: {val}")
 	exifdata = image.getexif()
+	if not exifdata:
+		return 
 	for tagid in exifdata:
 		tagname = TAGS.get(tagid, tagid)
 		value = exifdata.get(tagid)
+		if isinstance(value, bytes):
+			value = value.decode()
 		print(f"{tagname:20}: {value}")
 		
 
@@ -27,8 +100,9 @@ def process_files(files):
 		try:
 			print_image_meta_data(file)
 		except Exception as e:
+			print(e)
 			print(file , " has no exif data")
-			pass
+			
 
 
 def main():

@@ -8,7 +8,7 @@ import os
 def	fetch_images(image_links, params):
 	for image in image_links:
 		try:
-			r = requests.get(image[0], timeout=2)
+			r = requests.get(image[0], timeout=5)
 			timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 			filename = f"image_{timestamp}.png"
 			filename = params["p"] + "/" + timestamp +image[1]
@@ -24,7 +24,7 @@ def	fetch_images_recursively(links, params,recursions):
 		return
 	for link in links:
 		try:
-			r = requests.get(link, timeout=2)
+			r = requests.get(link, timeout=5)
 			images = extract_image_links(r.content, link)
 			fetch_images(images, params)
 			new_links = get_links_in_page(link)

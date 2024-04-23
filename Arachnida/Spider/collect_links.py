@@ -16,11 +16,11 @@ Steps for images fetching:
 
 """
 def	request_page(url):
-	return requests.get(url, timeout=4)
+	return requests.get(url, timeout=10)
 
 
 def	get_links_in_page(url):
-	r = requests.get(url, timeout=2)
+	r = requests.get(url, timeout=5)
 	soup = BeautifulSoup(r.text, 'html.parser')
 	link_layer = []
 	for links in soup.find_all('a'):
