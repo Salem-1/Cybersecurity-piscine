@@ -2,3 +2,10 @@ Arachnida/venv
 Arachnida/__pycache__
 *.pdf
 sandbox
+venv
+*.pkg
+*.toc
+*.zip
+*.txt
+*.pyc 
+.DS_Store
